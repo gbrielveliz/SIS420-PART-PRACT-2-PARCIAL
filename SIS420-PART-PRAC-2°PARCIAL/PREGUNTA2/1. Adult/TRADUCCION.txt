@@ -1,0 +1,120 @@
+| Estos datos se extrajeron de la base de datos de la oficina del censo que se encuentra en
+| http://www.census.gov/ftp/pub/DES/www/welcome.html
+| Donante: Ronny Kohavi y Barry Becker,
+| Minería y visualización de datos
+| Gráficos de silicio.
+| correo electrónico: ronnyk@sgi.com para preguntas.
+| Dividir en prueba de tren usando MLC ++ GenCVFiles (2/3, 1/3 aleatorio).
+| 48842 instancias, combinación de continuo y discreto (tren = 32561, prueba = 16281)
+| 45222 si se eliminan instancias con valores desconocidos (tren = 30162, prueba = 15060)
+| Instancias duplicadas o en conflicto: 6
+| Probabilidades de clase para el archivo adult.all
+| Probabilidad para la etiqueta '> 50K': 23,93% / 24,78% (sin incógnitas)
+| Probabilidad para la etiqueta '<= 50K': 76.07% / 75.22% (sin incógnitas)
+|
+| Barry Becker realizó la extracción de la base de datos del censo de 1994. Un conjunto de
+| Se extrajeron registros razonablemente limpios utilizando las siguientes condiciones:
+| ((EDAD> 16) && (AGI> 100) && (AFNLWGT> 1) && (HRSWK> 0))
+|
+| La tarea de predicción es determinar si una persona gana más de 50.000
+| un año.
+|
+| Primero citado en:
+| @inproceedings {kohavi-nbtree,
+| autor = {Ron Kohavi},
+| title = {Ampliación de la precisión de los clasificadores Naive-Bayes: a
+| Decision-Tree Hybrid},
+| booktitle = {Actas de la Segunda Conferencia Internacional sobre
+| Descubrimiento de conocimiento y minería de datos},
+| año = 1996,
+| pages = {aparecer}}
+|
+| La precisión del error se informa de la siguiente manera, después de eliminar las incógnitas de
+| conjuntos de tren / prueba):
+| C4.5: 84.46 + -0.30
+| Naive-Bayes: 83,88 + -0,30
+| NBTree: 85,90 + -0,28
+|
+|
+| Los siguientes algoritmos se ejecutaron más tarde con las siguientes tasas de error,
+| todo después de eliminar las incógnitas y usar la división de tren / prueba original.
+| Todos estos números son corridos directos que utilizan MLC ++ con valores predeterminados.
+|
+| Error de algoritmo
+| - ---------------- -----
+| 1 C4.5 			15.54
+| 2 C4.5-automático 		14.46
+| 3 C4.5 reglas 		14.94
+| 4 Votado ID3 (0,6)		15,64
+| 5 Votado ID3 (0.8) 		16.47
+| 6 T2 				16.84
+| 7 1R 				19,54
+| 8 NB Árbol 			14.10
+| 9 CN2 			16,00
+| 10 CAPUCHA 			14,82
+| 11 FSS Naive Bayes 		14.05
+| 12 IDTM (tabla de decisiones) 14.46
+| 13 Naive-Bayes 		16.12
+| 14 Vecino más cercano (1)	21,42
+| 15 Vecino más cercano (3) 	20,35
+| 16 OC1 			15.04
+| 17 guijarros se estrellaron. 	Desconocido por qué (se aumentaron los límites)
+|
+| Conversión de datos originales de la siguiente manera:
+| 1. Ingresos cruzados discretizados en dos rangos con un umbral de 50.000.
+| 2. Convierta EE. UU. A EE. UU. Para evitar períodos.
+| 3. Convertir Desconocido en "?"
+| 4. Ejecute MLC ++ GenCVFiles para generar datos, pruebe.
+|
+| Descripción de fnlwgt (peso final)
+|
+| Las ponderaciones de los archivos CPS se controlan según estimaciones independientes de la
+| población civil no institucional de los EE. UU. Estos se preparan mensualmente
+| para nosotros por la División de Población aquí en la Oficina del Censo. Usamos 3 juegos de
+| control S.
+| Estos son:
+| 1. Una estimación de celda única de la población de más de 16 años para cada estado.
+| 2. Controles de origen hispano por edad y sexo.
+| 3. Controles por Raza, edad y sexo.
+|
+| Usamos los tres conjuntos de controles en nuestro programa de ponderación y "rastrillamos"
+| 6 veces para que al final volvamos a todos los controles que usamos.
+|
+| El término estimación se refiere a los totales de población derivados de la EAP mediante la creación de
+| "recuentos ponderados" de cualquier característica socioeconómica especificada del
+| población.
+|
+| Las personas con características demográficas similares deberían tener
+| pesos similares. Hay una advertencia importante para recordar
+| sobre esta declaración. Es decir, dado que la muestra de CPS es
+| en realidad una colección de 51 muestras estatales, cada una con su propia
+| probabilidad de selección, la declaración sólo se aplica dentro de
+| estado.
+
+
+> 50K, <= 50K.
+
+0 edad: continua.
+		    8          7                6              5            4           3        2     	    1
+1 clase de trabajo: Privado, Self-emp-not-inc, Self-emp-inc, Federal-gov, Local-gov, State-gov, Sin paga, Nunca trabajado.
+		    
+2 fnlwgt: continuo.
+		14		13	     7		9	10		11	12	5	4	 8	15	   2	    6	  16	      3  	   1
+3 educación: Licenciatura, Alguna universidad, 11 °, HS-grad, Prof-school, Assoc-acdm, Assoc-voc, 9 °, 7 ° a 8 °, 12 °, Maestría, 1 ° a 4 °, 10 °, Doctorado, 5 ° a 6 °, Preescolar.
+
+4 número-educación: continuo.
+		       1		2		3         4       5          6                      7
+5 estado civil: Casado-civil-cónyuge, Divorciado, Nunca-casado, Separado, Viudo, Casado-cónyuge-ausente, Casado-AF-cónyuge.
+		1			2		3	   4		5		6			  7                 8                       9			10                  11                  12                 13             14             
+6 Ocupación: Soporte técnico, Reparación artesanal, Otro-servicio, Ventas, Gerente ejecutivo, Especialidad profesional, Limpiadores, Operadores de máquinas, Equipo administrativo, Agricultura-pesca, Transporte-mudanza, Priv-house- serv, Protective-serv, Fuerzas-Armadas.
+		1        2         3           4                 5           6
+7 parentesco: Esposa, Hijo Propio, Esposo, No en la familia, Otro pariente, Soltero.
+         1            2                         3             4      5
+8 raza: blanca, asiática-pacífica-isleña, amer-india-esquimal, otra, negra.
+         1         2
+9 sexo: Femenino, Masculino.
+10  plusvalía: continua.
+11 Pérdida de capital: continua.
+12 horas por semana: continuo.
+                        18	    4		15	 6	     16	      17           		14		    3      12	  10	 7     9     1       2     5          13          12       11      8
+13 país de origen: Estados Unidos, Camboya, Inglaterra, Puerto Rico, Canadá, Alemania, Periferia de EE. UU. (Guam-USVI-etc), India, Japón, Grecia, Sur, China, Cuba, Irán, Honduras, Filipinas, Italia , Polonia, Jamaica,
